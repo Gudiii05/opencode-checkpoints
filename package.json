@@ -4,6 +4,13 @@
   "version": "1.0.0",
   "type": "module",
   "main": "src/index.ts",
+  "author": "Gudiii05",
+  "license": "MIT",
+  "keywords": ["opencode", "plugin", "checkpoint", "git", "stash"],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Gudiii05/opencode-checkpoints"
+  },
   "files": [
     "src",
     "README.md"
