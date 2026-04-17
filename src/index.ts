@@ -159,21 +159,22 @@ async function createCheckpoint($: BunShell, directory: string, label: string): 
       return ""
     }
 
-    const firstPush = await $`git -C ${directory} stash push -u -m ${label}`.quiet().nothrow()
+    // Snapshot: push + immediate pop so the working tree stays the same
+    const push = await $`git -C ${directory} stash push -u -m ${label}`.quiet().nothrow()
 
-    if (getExitCode(firstPush) !== 0) {
-      console.error("[opencode-checkpoints] git stash push failed", getStdErr(firstPush))
+    if (getExitCode(push) !== 0) {
+      console.error("[opencode-checkpoints] git stash push failed", getStdErr(push))
       return ""
     }
 
-    const firstPushText = `${getStdOut(firstPush)}\n${getStdErr(firstPush)}`
-    if (/no local changes to save/i.test(firstPushText)) {
+    const pushText = `${getStdOut(push)}\n${getStdErr(push)}`
+    if (/no local changes to save/i.test(pushText)) {
       return ""
     }
 
-    const firstPop = await $`git -C ${directory} stash pop stash@{0}`.quiet().nothrow()
-    if (getExitCode(firstPop) !== 0) {
-      console.error("[opencode-checkpoints] git stash pop failed", getStdErr(firstPop))
+    const pop = await $`git -C ${directory} stash pop stash@{0}`.quiet().nothrow()
+    if (getExitCode(pop) !== 0) {
+      console.error("[opencode-checkpoints] git stash pop failed", getStdErr(pop))
       return ""
     }
 
